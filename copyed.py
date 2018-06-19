@@ -16,6 +16,9 @@ class Vector:
     def __mod__(self, other):  # Векторное произведение векторов, символ - %
         return self.x * other.y - self.y * other.x
 
+    def __len__(self):
+        return math.sqrt(self.x * self.x + self.y * self.y)
+
 
 class Point:
     def __init__(self, x, y):
@@ -65,9 +68,11 @@ while True:
         x1, y1 = corners[0][0][3]
         # x2, y2 = x0 + l, y0
         x2, y2 = np.float32(x0 + l), y0
-        scalar_mult = (x1 - x0) * (x2 - x0) + (y1 - y0) * (y2 - y0)
-        vector_mult = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0)
-        length = math.sqrt((x1 - x0) ** 2 + (y1 - y0) ** 2) * math.sqrt((x2 - x0) ** 2 + (y2 - y0) ** 2)
+        vector_1_0 = Vector(x1 - x0, y1 - y0)
+        vector_2_0 = Vector(x2 - x0, y2 - y0)
+        scalar_mult = vector_1_0 * vector_2_0
+        vector_mult = vector_1_0 % vector_2_0
+        length = len(vector_1_0) * len(vector_2_0)
         sin = vector_mult / length
         cos = scalar_mult / length
         center_x -= x0
@@ -78,13 +83,14 @@ while True:
         center_y1 = -center_x * sin + center_y * cos
         up_x1 = up_x * cos + up_y * sin
         up_y1 = -up_x * sin + up_y * cos
+
         if int(ids[0]) < len(markers):
             marker_x, marker_y = markers[int(ids[0])]
             center_x_absolute = center_x1 - marker_x
             center_y_absolute = center_y1 - marker_y
             up_x_absolute = up_x1 - marker_x
             up_y_absolute = up_y1 - marker_y
-            angle = getAngle(Point(center_x_absolute, center_y_absolute), Point(m[idm][0], m[idm][1]),
+            angle = getAngle(Point(center_x_absolute, center_y_absolute), Point(markers[idm][0], markers[idm][1]),
                              Point(up_x_absolute, up_y_absolute))
             print(angle)
         cv2.aruco.drawDetectedMarkers(frame, corners, ids)
