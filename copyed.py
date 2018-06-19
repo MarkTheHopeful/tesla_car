@@ -84,7 +84,7 @@ while True:
             center_y_absolute = center_y1 - marker_y
             up_x_absolute = up_x1 - marker_x
             up_y_absolute = up_y1 - marker_y
-            angle = getAngle(Point(center_x_absolute, center_y_absolute), Point(m[idm][0], m[idm][1]),
+            angle = getAngle(Point(center_x_absolute, center_y_absolute), Point(markers[idm][0], markers[idm][1]),
                              Point(up_x_absolute, up_y_absolute))
             print(angle)
         cv2.aruco.drawDetectedMarkers(frame, corners, ids)
